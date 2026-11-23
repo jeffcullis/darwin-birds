@@ -79,3 +79,7 @@ AGENTS.md
 *.ai
 *_agent.md
 *_prompt.md
+
+# temp folder
+temp/
+

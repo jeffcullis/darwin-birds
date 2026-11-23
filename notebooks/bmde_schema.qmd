@@ -1,0 +1,99 @@
+---
+title: "BMDE Schema"
+format: html
+editor: visual
+---
+
+```{r}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(knitr)
+```
+
+# BMDE Schema
+
+The BMDE 2.0 schema, as well as a number of extensions, are published on the [NatureCounts site](https://naturecounts.ca/nc/default/nc_bmde_fields.jsp?version=BMDE2.00).
+
+Pulled the BMDE 2.0, minimum, and extended information into separate CSV files in `data/external`.
+
+Load the BMDE files as data frames.
+
+```{r}
+bmde_filenames <- c(
+  min = "../data/external/BMDE2.00-min.csv",
+  std = "../data/external/BMDE2.00.csv",
+  ext = "../data/external/BMDE2.00-ext.csv"
+)
+
+# Load the CSV files with read_csv, with all column types set to text
+bmde <- map(bmde_files, \(f) read_csv(f, col_types = cols(.default = col_character())))
+```
+
+Now each data frame can be referenced as e.g. `bmde$min`.
+
+Get the column counts for each extension.
+
+```{r}
+map_int(bmde, nrow)
+```
+Next, build a data frame that combines all the terms across these extensions, and shows which extension each term is a member of.
+
+```{r}
+membership <- bmde |>
+  # imap - send each df and set name ("min", "std", "ext") via anonymous function
+  imap(\(df, set) df |>
+         select(field) |>
+         mutate("in_{set}" := TRUE)) |>
+  # reduce: given a list and fn that combines, merges the three df's into one, two at a time.
+  reduce(full_join, by = "field") |>
+  mutate(across(starts_with("in_"), function(x) coalesce(x, FALSE)))
+
+  head(membership)
+```
+Build a lookup df mapping terms to their descriptions.
+```{r}
+# One description per field, preferring the extended list, then standard, then minimum
+descriptions <- bmde[c("ext", "std", "min")] |>
+  bind_rows() |>
+  distinct(field, .keep_all = TRUE)
+
+head(descriptions)
+```
+
+Join on the field column to add the descriptions and a 'set summary' string column using the last two dfs above.
+
+```{r}
+# Use pmap_chr -  takes a list of vectors of equal length and calls the fn once per row.
+# The _chr means each call must return a string, results in char vector for new column.
+fields <- membership |>
+  left_join(descriptions, by = "field") |>
+  mutate(
+    sets = pmap_chr(
+      list(in_min, in_std, in_ext),
+      function(m, s, e) paste(c("min", "std", "ext")[c(m, s, e)], collapse = ", ")
+    )
+  ) |>
+  # Keep the field order from the extended list, then any fields only found elsewhere
+  arrange(match(field, bmde$ext$field)) |>
+  select(field, in_min, in_std, in_ext, sets, description)
+
+head(fields)
+```
+Summarize the number of fields that are members of each combination of sets.
+
+```{r}
+#| label: summary
+summary <- fields |>
+  count(sets, name = "n_fields") |>
+  arrange(desc(n_fields))
+
+summary
+```
+We see that many set combinations don't exist, e.g. min on its own, thus we can conclude based on the combinations that do exist that the three sets of terms fit cleanly within each other.
+
+Write the `fields` df to CSV.
+```{r}
+write_csv(fields, "../data/processed/bmde_set_info.csv")
+```

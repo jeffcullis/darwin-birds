@@ -1,0 +1,170 @@
+field,description
+GlobalUniqueIdentifier,"A universal resource name for the global unique identifier for the specimen or observation record. The identifier should be the complete Uniform Resource Name (URN) for the record. In the absence of a persistent global unique identifier, construct one in the form ""URN:catalog:[InstitutionCode]:[CollectionCode]:[CatalogNumber]""."
+DateLastModified,"The last time when any of the data for the record were modified. Returns values as ISO 861 date and time in UTC(GMT). (see http://www.w3.org/TR/NOTE-datetime). Data sources should use a native datetime data type, if possible."
+BasisOfRecord,A descriptive term indicating whether the record represents an object or observation
+InstitutionCode,"The code (or acronym) identifying the institution administering the collection in which the organism record is cataloged. No global registry exists for institutional codes; use the code that is ""standard"" in your discipline."
+CollectionCode,The code (or acronym) identifying the collection within the institution in which the organism record is cataloged (not applicable to AKNS).
+CatalogNumber,"The alphanumeric value identifying an individual organism record within the collection. It is highly recommended that each record is uniquely identified within a collection by this value. It is also recommended that each record is universally uniquely identified by the combination of InstitutionCode, CollectionCode and CatalogNumber."
+ScientificName,The full name of the lowest level taxon to which the organism can be identified.
+HigherTaxon,"The combination of names of taxonomic ranks less specific than Genus. ""Like"" query operations on this element will search for a substring that might be in any of the higher taxonomy elements."
+Kingdom,The name of the kingdom in which the organism is classified.
+Phylum,The name of the phylum (or division) in which the organism is classified.
+Class,The name of the class in which the organism is classified.
+Order,The name of the order in which the organism is classified.
+Family,The name of the family in which the organism is classified.
+Genus,The name of the genus in which the organism is classified.
+SpecificEpithet,The specific epithet of the scientific name applied to the organism.
+InfraspecificRank,"The infraspecific rank (subspecies, variety, forma) of the InfraspecificEpithet."
+InfraspecificEpithet,The infraspecific epithet of the scientific name applied to the object or observation.
+ScientificNameAuthor,The author of the ScientificName. Can be more than one author in a concatenated string. Should be formatted according to the conventions of the applicable taxonomic discipline.
+IdentificationQualifier,A standard term to qualify the identification of the organism when doubts have arisen as to its identity.
+HigherGeography,"The combination of all geographic elements less specific than locality. ""Like"" query operations on this element will search for a substring that might be in any of the higher geography elements."
+Continent,"The full, unabbreviated name of the continent from which the organism was collected."
+WaterBody,"The full, unabbreviated name of the body of water from which the organism was collected."
+IslandGroup,"The full, unabbreviated name of the island group from which the organism was collected."
+Island,"The full, unabbreviated name of the island from which the organism was collected."
+Country,"The full, unabbreviated name of the country or major political unit from which the organism was collected."
+StateProvince,"The full, unabbreviated name of the state, province, or region (i.e., the next smaller political region than Country) from which the organism was collected."
+County,"The full, unabbreviated name of the county, shire, or municipality (i.e., the next smaller political region than StateProvince) from which the organism was collected."
+Locality,"The description of the locality where the organism was collected or the study area where it was observed. Need not contain geographic information provided in other geographic fields. Localities usually contain one or more places where observations/collections were made, identified by RouteIdentifiers (see below)."
+MinimumElevationInMeters,The minimum altitude in meters above (positive) or below (negative) sea level of the collecting locality.
+MaximumElevationInMeters,The maximum altitude in meters above (positive) or below (negative) sea level of the collecting locality.
+MinimumDepthInMeters,The minimum depth in meters below the surface of the water at which the collection was made; all material collected was at least this deep. Use positive values for locations below the surface.
+MaximumDepthInMeters,The maximum depth in meters below the surface of the water at which the collection was made; all material collected was at most this deep. Use positive values for locations below the surface.
+DecimalLatitude,"The latitude of the location from which the organism was collected, expressed in decimal degrees."
+DecimalLongitude,"The longitude of the location from which the organism was collected, expressed in decimal degrees."
+GeodeticDatum,"The geodetic datum to which the latitude and longitude refer. If not known, use ""not recorded"". This concept should be vocabulary-controlled."
+CoordinateUncertaintyInMeters,"The upper limit of the distance (in meters) from the given latitude and longitude describing a circle within which the whole of the described locality must lie. Use NULL where the uncertainty is unknown, cannot be estimated, or is not applicable (because there are no coordinates)."
+YearCollected,The four digit year in the Common Era calendar in which the organism was collected from the field.
+MonthCollected,The two digit month of year in the Common Era calendar during which the organism was collected from the field.
+DayCollected,The two digit day of the month in the Common Era calendar during which the organism was collected from the field.
+TimeCollected,"The time of day the object or observation was collected from the field, expressed as decimal hours from midnight, local time (e.g., 12. = noon, 13.5 = 1:3pm)."
+JulianDay,"The ordinal day of the year (the number of days since December 31 of the previous year) on which the object or observation was collected. This value is derived from the YearCollected, MonthCollected, and DayCollected by the provider software."
+Collector,The name(s) of the collector(s) of the original data for the object or observation.
+Sex,The sex of a biological individual represented by the cataloged object or observation
+LifeStage,"The age class, reproductive stage, or life stage of the biological individual referred to by the record."
+ImageURL,A reference to digital images associated with the specimen or observation.
+RelatedInformation,"Free text references to information not delivered via the conceptual schema (e.g., URLs to specimen details, photographs, publications, etc.)."
+CollectorNumber,An identifying string applied to the object or observation at the time of collection. Serves as a link between field notes and the object or observation.
+FieldNumber,An identifying string applied to a set of objects or observations resulting from a single collecting event.
+FieldNotes,"A flag marking the existence of, or a reference to, notes taken in the field for the object or observation."
+OriginalCoordinatesSystem,The name of the system in which the original geographic coordinates were recorded.
+LatLongComments,Comments about the geographic coordinate determination.
+GeoreferenceMethod,A reference to the methods used for determining the coordinates and uncertainties.
+GeoreferenceReferences,"A list of maps, gazetteers or other resources used to georeference the locality. The content of this concept is meant to be specific enough to allow anyone in the future to use the same resource to georeference the same locality."
+GeoreferenceVerificationStatus,The extent to which the georeference has been verified to represent the location where the specimen or observation was collected.
+Remarks,Free text comments accompanying the object or observation record.
+FootprintWKT,"A Well-Known Text (WKT) representation of the shape (footprint, geometry) that defines the Location. A Location may have both a point-radius representation (see DecimalLatitude) and a footprint representation, and they may differ from each other."
+FootprintSRS,"A Well-Known Text (WKT)  representation of the Spatial Reference System (SRS) for the footprintWKT of the Location. Do not use this term to describe the SRS of the decimalLatitude and decimalLongitude, even if it is the same as for the footprintWKT - use the geodeticDatum instead."
+ProjectCode,The code (or acronym) identifying the project within the institution during which the observation was made.
+ProtocolType,Broad category of protocol employed to make this observation
+ProtocolCode,"The code (or acronym) identifying the protocol used to collect the observation data, using standards defined within your discipline. This code is more specific to your exact protocol than the ProtocolType."
+ProtocolSpeciesTargeted,A short description of the species or taxonomic group(s) targeted by the survey protocol.
+ProtocolReference,A published reference describing the protocol used to collect the observation data.
+ProtocolURL,The URL of the reference describing the protocol used to collect the observation data.
+SurveyAreaIdentifier,"A unique identifier (alphanumeric) identifying the geographic site (point count, area search plot, nest box number, colony number, etc.) at which the observation was made. The identifier must uniquely identify a site within each project and may often be contained within a Route and/or a Locality."
+SurveyAreaSize,Size (ha) of the survey area.
+SurveyAreaPercentageCovered,Percentage of the SurveyAreaSize actually covered during the sampling event. A missing value is assumed to represent 100%. The value can be smaller for example in cases where the presence of a shoreline reduces the effective size of the normal sampling plot.
+SurveyAreaShape,Shape of the survey area covered by the observation event.
+SurveyAreaLongAxisLength,"Length (m) of the long axis of the survey area. In the case of a rectangle, this is equal to the size of the longest side. In the case of a circle, this is equal to the diameter."
+SurveyAreaShortAxisLength,"Length (m) of the short axis of the survey area. The short axis must be perpendicular to the long axis. In the case of a rectangle, this is equal to the size of the shortest side. In the case of a square or a circle, the short axis is equal to the long axis. In the case of a half circle, this is equal to the radius."
+SurveyAreaLongAxisOrientation,"Orientation (decimal degrees, relative to true north) of the long axis of the survey area."
+CoordinatesScope,"Geographic scope of the coordinates, indicating whether they represent the location of the individual sampling event, the route, or another broader geographic area."
+SamplingEventIdentifier,"A unique identifier identifying the sampling event during which  or more observations were made. The identifier must uniquely identify a sampling event within each project, and can be any combinations of characters. A sampling event is defined as an attempt to observe birds during a specified amount of time (between TimeObservationsStarted and TimeObservationsEnded) at a location (identified by SurveyAreaIdentifier). Note that data for which the concept of a SamplingEvent refers to different types of SurveyAreas should not be mixed within a single BMDE resource."
+SamplingEventStructure,"Describes the structure of the SamplingEventIdentifier in a way that expresses the relationship between the sampling hierarchical levels (eg, for a stratified survey design, such as plots within quadrats within area or stops within routes). Ideally, the SamplingEventIdentifier should be composed in such a way to allows to identify these various sampling levels, and separating those by a dash. (eg, Route-Stop-UniqueID, or Site-Year-Month-Day)."
+RouteIdentifier,"A unique identifier for a route, transect, set of nets, or any higher organizational unit that is comprised of 1 or more SurveyAreas, traps, or nets."
+TimeObservationsStarted,"The time of day the entire observation event started (this may be different from the time when the observation represented by this single record was made), expressed as decimal hours from midnight, local time (e.g., 12. = noon, 13.5 = 1:3pm)."
+TimeObservationsEnded,"The time of day the entire observation event ended (this may be different from the time when the observation represented by this single record was made), expressed as decimal hours from midnight, local time (e.g., 12. = noon, 13.5 = 1:3pm)."
+DurationInHours,"The total duration of the entire observation event during which this particular observation was made, expressed as decimal hours."
+TimeIntervalStarted,"Time (decimal hours) of the start of the interval where this observation was made, relative to the start of the entire observation event."
+TimeIntervalEnded,"Time (decimal hours) of the end of the interval when this observation was made, relative to the start of the entire observation event."
+TimeIntervalsAdditive,"Indicates whether values in ObservationCount can be added together accross different time intervals (Yes or No). ""Yes"" = only new individuals are reported in each interval. ""No"" means = all individuals are reported within each interval."
+NumberOfObservers,The total number of observers who participated in the observation event.
+EffortMeasurement1,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits1,Units of measurement for the matching effort field.
+EffortMeasurement2,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits2,Units of measurement for the matching effort field.
+EffortMeasurement3,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits3,Units of measurement for the matching effort field.
+EffortMeasurement4,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits4,Units of measurement for the matching effort field.
+EffortMeasurement5,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits5,Units of measurement for the matching effort field.
+EffortMeasurement6,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits6,Units of measurement for the matching effort field.
+EffortMeasurement7,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits7,Units of measurement for the matching effort field.
+EffortMeasurement8,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits8,Units of measurement for the matching effort field.
+EffortMeasurement9,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits9,Units of measurement for the matching effort field.
+EffortMeasurement10,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits10,Units of measurement for the matching effort field.
+EffortMeasurement11,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits11,Units of measurement for the matching effort field.
+EffortMeasurement12,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits12,Units of measurement for the matching effort field.
+EffortMeasurement13,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits13,Units of measurement for the matching effort field.
+EffortMeasurement14,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits14,Units of measurement for the matching effort field.
+EffortMeasurement15,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits15,Units of measurement for the matching effort field.
+EffortMeasurement16,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits16,Units of measurement for the matching effort field.
+EffortMeasurement17,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits17,Units of measurement for the matching effort field.
+EffortMeasurement18,A measure of the effort that was devoted to the observation event (up to 18 measures can be specified). Units are defined by the matching EffortUnits field.
+EffortUnits18,Units of measurement for the matching effort field.
+NoObservations,This field is used to indicate cases when no individuals (among all species targeted by the survey protocol) were detected during a sampling event (possible values: NoObs or blank). The taxon name fields for NoObs records should be left blank.
+DistanceFromObserver,"Distance (m) between observer and organism being observed. If the distance is evaluated within a range, use DistanceFromObserverMin and DistanceFromObserverMax instead."
+DistanceFromObserverMin,Minimum distance of a range (m) between the observer and the organism being observed.
+DistanceFromObserverMax,"Maximum distance of a range (m) between the observer and the organism being observed. Use the word ""Unlimited"" in cases where the range has an unlimited distance."
+DistanceFromStart,Distance (m) between the point of the observation and the start of the observation event (only applicable to non-stationary censuses).
+BearingInDegrees,"Bearing (angle in decimal degrees from  to 36) to the specimen, relative to an arbitrary bearing (e.g., north, direction of the transect or direction faced by the observer), ideally defined in the BMDR or the protocol."
+SpecimenDecimalLatitude,"The latitude from which the individual record was collected, in cases where the main coordinates described above represent a centroid for the entire sampling event."
+SpecimenDecimalLongitude,"The longitude from which the individual record was collected, in cases where the main coordinates described above represent a centroid for the entire sampling event."
+SpecimenGeodeticDatum,"The geodetic datum to which the SpecimenDecimalLatitude and SpecimenDecimalLongitude refer. If not known, use ""not recorded"". This concept should be vocabulary-controlled."
+SpecimenUTMZone,"The UTM zone from which the individual record was collected, in cases where the main coordinates described above represent a centroid for the entire sampling event."
+SpecimenUTMNorthing,"The UTM northing from which the individual record was collected, in cases where the main coordinates described above represent a centroid for the entire sampling event."
+SpecimenUTMEasting,"The UTM easting from which the individual record was collected, in cases where the main coordinates described above represent a centroid for the entire sampling event."
+ObservationCount,"Number of individuals detected or observed during this observation event. In the case of presence/absence data, use 1 to indicate presence and indicate ""Presence/Absence"" under ObservationDescriptor"
+ObservationDescriptor,"Descriptor that provides information on the type of count, the behavior or location of the individuals reported, using a standard vocabulary and/or format. Use ""Total Count"" if the ObservationCount field contains the total count of all records for a given species, or ""Presence/Absence"" if the data reflects presence absence. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObservationCount2,Number of individuals detected or observed during this observation event - up to 14 Counts and Descriptors can be attributed to this record.
+ObservationDescriptor2,"Descriptor that provides information on the behavior or location of the individuals reported, using a standard vocabulary and/or format. ""TotalCount"" should ideally be restricted to ObservationCount only. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObservationCount3,Number of individuals detected or observed during this observation event - up to 14 Counts and Descriptors can be attributed to this record.
+ObservationDescriptor3,"Descriptor that provides information on the behavior or location of the individuals reported, using a standard vocabulary and/or format. ""TotalCount"" should ideally be restricted to ObservationCount only. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObservationCount4,Number of individuals detected or observed during this observation event - up to 14 Counts and Descriptors can be attributed to this record.
+ObservationDescriptor4,"Descriptor that provides information on the behavior or location of the individuals reported, using a standard vocabulary and/or format. ""TotalCount"" should ideally be restricted to ObservationCount only. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObservationCount5,Number of individuals detected or observed during this observation event - up to 14 Counts and Descriptors can be attributed to this record.
+ObservationDescriptor5,"Descriptor that provides information on the behavior or location of the individuals reported, using a standard vocabulary and/or format. ""TotalCount"" should ideally be restricted to ObservationCount only. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObservationCount6,Number of individuals detected or observed during this observation event - up to 14 Counts and Descriptors can be attributed to this record.
+ObservationDescriptor6,"Descriptor that provides information on the behavior or location of the individuals reported, using a standard vocabulary and/or format. ""TotalCount"" should ideally be restricted to ObservationCount only. Distance or time intervals should be entered using this format: -1 m, >1 m, -2 min., 2-5 min., etc. Other values could include age or sex classes (Adults, Juveniles, 1st Year, After 2nd Year, Males, Females, etc.), site classes (Flyover, Outside Sampling Area, Offshore, Shoreline, Inland, etc.), behavior (Singing, Calling, Sleeping, Feeding, etc.)."
+ObsCountAtLeast,Low value of a range count of individuals detected or observed during this observation event.
+ObsCountAtMost,High value of a range count of individuals detected or observed during this observation event.
+ObservationDate,"Full date-time of this observation event (ISO 861 Format). Not necessary if DarwinCore YearCollected, MonthCollected, DayCollected, TimeCollected fields are completed, or if precise time or date is unknown."
+DateUncertaintyInDays,"Uncertainty of the ObservationDate (decimal days), for cases where exact observation date is unknown."
+AllIndividualsReported,"Whether the ObservationCount includes all individuals detected during the sampling event (vs. only presence for example, or partial counts)."
+AllSpeciesReported,"Whether the ObservationCount for a given taxon includes all individuals that have been detected within a higher taxonomic group, such as the class (eg, all Birds, all Fishes, or all Butterflies), as defined in the field ProtocolSpeciesTargeted, or as defined by the protocol. ""No"" should be used to indicate that the sampling event should not be used to infer negative observations (the absence of the species not reported within the scope of the protocol)."
+UTMZone,The UTM zone of the location from which the organism was collected/observed.
+UTMNorthing,The UTM northing value of the location from which the organism was collected/observed.
+UTMEasting,The UTM easting value of the location from which the organism was collected/observed.
+CoordinatesUncertaintyInDecimalDegrees,"The upper limit of the distance (in decimal degrees) from the given latitude and longitude describing a circle within which the whole of the described locality must lie. Leave blank where the uncertainty is unknown, cannot be estimated, or is not applicable (because there are no coordinates)."
+CommonName,"Common vernacular name to describe the taxon (may be common name or other names that do not conform to a standard taxonomy). Whenever possible, the name should conform to the AKN/eBird taxonomy."
+RecordPermissions,Permissions regarding the display and distribution of this record. Default value is 5 (public).
+MultiScientificName1,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+MultiScientificName2,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+MultiScientificName3,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+MultiScientificName4,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+MultiScientificName5,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+MultiScientificName6,"Full scientific name of one of the possible taxa involved in this record, in cases where the record is one of several possible taxa. In cases of species grouping, the core taxonomic fields should only be provided if they apply to all possible taxa in the group. The various species that belong to this group should be listed for all records, even if some of them have not been actually detected in a specific record. Up to 6 member taxa can be recorded using the 6 MultiScientificName fields."
+TaxonomicAuthorityAuthors,Name of the author(s) who published the taxonomic authority used for this record.
+TaxonomicAuthorityVersion,Version number (including minor version or supplement number) of the taxonomic authority
+TaxonomicAuthorityYear,"Year of publication of the taxonomic authority, including minor version and supplement."
+SpeciesCode,Alphanumerical code describing a species in the native database. Should only be provided when species codes were used to describe species in the original database.
+TaxonConceptID,A unique identifier for the taxon concept (a circumscription of a taxonName).
+BreedingBirdAtlasCode,"Breeding Bird Atlas evidence code, using North American Atlas Committee standards. See https://www.birdscanada.org/norac/"
+HabitatDescription,General description of the habitat within the survey area.
+Remarks2,"Additional remarks field, not already included in Remarks."
+LastModifiedAction,The last action that was taken on this record at DateLastModified.
+RecordReviewStatus,Current review status or decision regarding this individual record.

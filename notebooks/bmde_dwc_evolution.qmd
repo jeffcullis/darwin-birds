@@ -1,0 +1,82 @@
+---
+title: "bmde_dwc_evolution.qmd"
+format:
+  html:
+    toc: true
+    code-fold: true
+    df-print: kable
+execute:
+  warning: false
+  message: false
+---
+
+# Darwin Core Term Versions
+
+The Darwin Core terms are versioned in GitHub here:
+https://github.com/tdwg/dwc/raw/refs/heads/master/vocabulary/term_versions.csv
+
+Also downloaded BMDE 2.00 to `data/external`.
+
+The [AKN paper](https://research.fs.usda.gov/treesearch/36765) introducing BMDE was published in 2009, though it sounds as though the BMDE standard may have been developed and circulated online around 2005 or 2006. 
+
+The first release of DwC was 2009-10-09, though there are dates earlier than this for terms in the above `term_versions.csv`.
+
+We will first load and take a look at the first rows in the `term_versions.csv`.
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(knitr)
+
+TERM_VERSIONS_URL <- "https://github.com/tdwg/dwc/raw/refs/heads/master/vocabulary/term_versions.csv"
+BMDE_FIELDS_CSV <- "data/external/bmde_2.00_fields.csv"
+DWC_RATIFIED <- as.Date("2009-10-09") # TDWG ratification of the first DwC standard
+TODAY <- Sys.Date()
+```
+
+```{r}
+term_versions_raw <- read.csv(TERM_VERSIONS_URL, na.strings = "", stringsAsFactors = FALSE)
+head(term_versions_raw)
+```
+```{r}
+nrow(term_versions_raw)
+```
+
+So we see that each row gives an iri identifying a version of a given DwC term. Rows have the version's publication date in a separate column, and the status column tells us whether this version of the term has been superseded, recommended (current), or deprecated.
+
+Reformat dates and strip the '#-<int>' version from the iri into a new dataframe
+
+```{r}
+term_versions <- term_versions_raw |>
+  mutate(
+    issued = as.Date(issued, format = "%Y-%m-%d"),
+    namespace = str_remove(term_iri, "[^/#]+$")
+  )
+head(term_versions)
+```
+
+Function to get the terms that were in use on a given date.
+```{r}
+dwc_snapshot <- function(on_date) {
+  term_versions |>
+    filter(issued <= on_date) |>
+    arrange(issued) |>
+    group_by(term_iri) |>
+    slice_tail(n = 1) |>
+    ungroup() |>
+    filter(status != "deprecated")
+}
+```
+
+Now we can get the terms in use in 2009 vs those in use today.
+```{r}
+dwc_2009 <- dwc_snapshot(DWC_RATIFIED)
+dwc_today <- dwc_snapshot(TODAY)
+```
+
+Next, get the 
+
+
+
+
