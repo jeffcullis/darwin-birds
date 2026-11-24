@@ -16,7 +16,12 @@ library(knitr)
 
 The BMDE 2.0 schema, as well as a number of extensions, are published on the [NatureCounts site](https://naturecounts.ca/nc/default/nc_bmde_fields.jsp?version=BMDE2.00).
 
-Pulled the BMDE 2.0, minimum, and extended information into separate CSV files in `data/external`.
+Pulled the BMDE 2.0, minimum, and extended information into separate CSV files in `data/external`, using the R script `scripts/data_processing/parse_bmde_terms.R`. Note that this script will not overwrite the files if they already exist in `data/external`. For more details there are some examples in the script's header comments.
+
+```{r}
+source("../scripts/data_processing/parse_bmde_terms.R")
+parse_bmde_terms(c("BMDE2.00", "BMDE2.00-ext", "BMDE2.00-min"))
+```
 
 Load the BMDE files as data frames.
 
@@ -38,6 +43,7 @@ Get the column counts for each extension.
 ```{r}
 map_int(bmde, nrow)
 ```
+
 Next, build a data frame that combines all the terms across these extensions, and shows which extension each term is a member of.
 
 ```{r}
@@ -52,7 +58,9 @@ membership <- bmde |>
 
   head(membership)
 ```
+
 Build a lookup df mapping terms to their descriptions.
+
 ```{r}
 # One description per field, preferring the extended list, then standard, then minimum
 descriptions <- bmde[c("ext", "std", "min")] |>
@@ -81,6 +89,7 @@ fields <- membership |>
 
 head(fields)
 ```
+
 Summarize the number of fields that are members of each combination of sets.
 
 ```{r}
@@ -91,9 +100,11 @@ summary <- fields |>
 
 summary
 ```
+
 We see that many set combinations don't exist, e.g. min on its own, thus we can conclude based on the combinations that do exist that the three sets of terms fit cleanly within each other.
 
 Write the `fields` df to CSV.
+
 ```{r}
 write_csv(fields, "../data/processed/bmde_set_info.csv")
 ```
