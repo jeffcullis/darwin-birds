@@ -33,7 +33,7 @@ bmde_filenames <- c(
 )
 
 # Load the CSV files with read_csv, with all column types set to text
-bmde <- map(bmde_files, \(f) read_csv(f, col_types = cols(.default = col_character())))
+bmde <- map(bmde_filenames, \(f) read_csv(f, col_types = cols(.default = col_character())))
 ```
 
 Now each data frame can be referenced as e.g. `bmde$min`.

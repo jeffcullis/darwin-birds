@@ -6,8 +6,8 @@
 *.Rproj
 .Rproj.user/
 
-# renv files (keep renv.lock, ignore renv/ folder)
-renv/
+# renv files (keep renv.lock, ignore renv/library folder)
+renv/library/
 !renv.lock
 
 # Environment files
