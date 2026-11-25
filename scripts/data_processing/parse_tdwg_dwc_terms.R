@@ -21,7 +21,7 @@
 # "UseWithIRI") are recorded in `class` using the section heading.
 #
 # Default output is the project's
-# data/external/tdwg_dwc_quick_reference_terms.csv, regardless of the working
+# data/external/tdwg/dwc_quick_reference_terms.csv, regardless of the working
 # directory. The project root is the nearest folder above this script
 # containing an .Rproj file (falling back to searching upward from the working
 # directory if the script's own location can't be determined). An explicit
@@ -102,8 +102,8 @@ row_value <- function(table_html, label) {
 }
 
 parse_tdwg_dwc_terms <- function(
-    out_file = file.path(dwc_project_root(), "data", "external",
-                         "tdwg_dwc_quick_reference_terms.csv"),
+    out_file = file.path(dwc_project_root(), "data", "external", "tdwg",
+                         "dwc_quick_reference_terms.csv"),
     url = dwc_terms_url) {
   html <- paste(readLines(url, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
 

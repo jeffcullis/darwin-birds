@@ -1,0 +1,9 @@
+---
+title: "index"
+format: html
+---
+
+[BMDE Schema](bmde_schema.html)
+
+[TDWG DwC terms](tdwg_dwc_terms.html)
+
