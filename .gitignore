@@ -83,3 +83,6 @@ AGENTS.md
 # temp folder
 temp/
 
+
+/.quarto/
+**/*.quarto_ipynb
