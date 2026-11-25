@@ -1,6 +1,7 @@
 ---
 title: "tdwg_dwc_terms"
 format: html
+output-dir: ../docs/
 ---
 
 ```{r}
@@ -22,20 +23,19 @@ Note that the script will overwrite the existing CSV by default. It may be worth
 ```{r}
 source("../scripts/data_processing/parse_tdwg_dwc_terms.R")
 tdwg_terms <- parse_tdwg_dwc_terms()
-```
-
-```{r}
 head(tdwg_terms)
+nrow(tdwg_terms)
 ```
 
 A few notes about the DwC QRG page:
 
-- Two sections aren't classes. "Record-level" (8 terms) and "UseWithIRI" (119 terms) are page sections, not classes, so their terms get the section name in the class column. UseWithIRI holds the IRI versions of terms from many different classes.
+- Two sections, as listed, aren't technically classes. "Record-level" (8 terms) and "UseWithIRI" (119 terms) are page sections, not classes, so their terms get the section name in the class column. UseWithIRI holds the IRI versions of terms from many different classes.
 - Class assignment follows the page layout. For example, ecoiri:absentTaxa sits under MachineObservation on the page, so that's the class it is assigned.
 - Classes with no terms don't appear. Classes like LivingSpecimen and PreservedSpecimen have no terms of their own, so they aren't in the CSV.
 
 Next, pull the list of TDWG terms from the GitHub page - all terms in vertical format, as well as the set of 'DwC simple' terms.
 
 ```{r}
-tdwg_vertical_url <- "https://github.com/tdwg/dwc/raw/refs/heads/master/dist/dwc_vertical.csv"
-tdwg_vertical_terms <- read_csv(url, show_col_types = FALSE)
+# tdwg_vertical_url <- "https://github.com/tdwg/dwc/raw/refs/heads/master/dist/dwc_vertical.csv"
+#tdwg_vertical_terms <- read_csv(url, show_col_types = FALSE)
+```
