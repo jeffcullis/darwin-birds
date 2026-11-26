@@ -55,5 +55,6 @@ A few notes about the DwC QRG page:
 Next, the following function will pull all of the ac, chrono, dc, ... term list CSV files from the DwC GitHub into the local 
 
 ```{r}
-
+source(here::here("functions", "dwc_term_sets.R"))
+terms <- add_dwc_term_sets()
 ```
