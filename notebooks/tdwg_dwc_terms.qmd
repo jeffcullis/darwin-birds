@@ -77,3 +77,7 @@ head(term_versions_df)
 Next, for each of the terms in the `tdwg_terms` dataframe, add the date that this term was minted as a new column in the dataframe.
 
 ```{r}
+source(find_root_file("functions", "dwc_minted_on.R", criterion = is_rstudio_project))
+tdwg_terms <- add_dwc_minted_on(tdwg_terms, term_versions_df)
+head(tdwg_terms)
+```
