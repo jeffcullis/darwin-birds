@@ -8,6 +8,7 @@ format: html
 #| warning: false
 library(readr)
 library(curl)
+library(rprojroot)
 ```
 
 TDWG maintains information about the standard DwC terms in a few different places:
@@ -52,9 +53,27 @@ A few notes about the DwC QRG page:
 
 ## DwC Extension Lists
 
-Next, the following function will pull all of the ac, chrono, dc, ... term list CSV files from the DwC GitHub into the local 
+Next, the following script will pull all of the ac, chrono, dc, ... term list CSV files from the TDWG DwC GitHub repo into the `data/external/tdwg/` subfolder, and the subsequent function will add the set info to the `tdwg_terms` dataframe.
 
 ```{r}
-source(here::here("functions", "dwc_term_sets.R"))
-terms <- add_dwc_term_sets()
+source(find_root_file("scripts", "data_processing", "download_dwc_term_sets.R", criterion = is_rstudio_project))
+source(find_root_file("functions", "dwc_term_sets.R", criterion = is_rstudio_project))
+tdwg_terms <- add_dwc_term_sets(tdwg_terms)
+head(tdwg_terms)
 ```
+
+## Term Versions CSV
+
+First, download the `term_versions.csv` file from the TDWG Github repo to `data/external/tdwg/`, and then load it into a dataframe.
+
+```{r}
+term_versions_url <- "https://github.com/tdwg/dwc/raw/refs/heads/master/vocabulary/term_versions.csv"
+term_versions_path <- find_root_file("data", "external", "tdwg", "term_versions.csv", criterion = is_rstudio_project)
+curl_download(term_versions_url, term_versions_path)
+term_versions_df <- read_csv(term_versions_path)
+head(term_versions_df)
+```
+
+Next, for each of the terms in the `tdwg_terms` dataframe, add the date that this term was minted as a new column in the dataframe.
+
+```{r}

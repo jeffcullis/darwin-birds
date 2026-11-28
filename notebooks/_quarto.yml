@@ -3,7 +3,7 @@ project:
   output-dir: ../docs
 
 website:
-  title: "My Project"
+  title: "Darwin Core and BMDE"
 
 format:
   html:

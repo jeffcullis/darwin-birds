@@ -12,10 +12,9 @@
 # The page embeds every version's field list as JSON in the `data-props`
 # attribute of the BMDEFieldsNCPage component, so a single request is enough.
 #
-# Output always goes to the project's data/external/ folder, regardless of
-# the working directory. The project root is the nearest folder above this
-# script containing an .Rproj file (falling back to searching upward from the
-# working directory if the script's own location can't be determined).
+# Output goes to the project's data/external/ folder by default. The project
+# root is found with rprojroot (the nearest folder at or above the working
+# directory containing an .Rproj file).
 #
 # Usage (paths shown relative to the project root):
 #   Rscript scripts/data_processing/parse_bmde_terms.R --list
@@ -28,38 +27,6 @@
 #   parse_bmde_terms(c("BMDE1.38", "BMDE-NEST-2.00"))
 
 bmde_url <- "https://naturecounts.ca/nc/default/nc_bmde_fields.jsp"
-
-# Walk up from `start` to the first directory containing an .Rproj file.
-find_project_root <- function(start) {
-  dir <- normalizePath(start, mustWork = FALSE)
-  repeat {
-    if (length(list.files(dir, pattern = "\\.Rproj$")) > 0) return(dir)
-    parent <- dirname(dir)
-    if (parent == dir) return(NA_character_)
-    dir <- parent
-  }
-}
-
-# Path of this script, captured when it is loaded: via `--file=` under
-# Rscript, or via source()'s `ofile` when sourced. NA if neither applies.
-bmde_script_path <- if (sys.nframe() == 0L) {
-  sub("^--file=", "", grep("^--file=", commandArgs(FALSE), value = TRUE)[1])
-} else {
-  ofiles <- Filter(Negate(is.null), lapply(sys.frames(), function(f) f$ofile))
-  if (length(ofiles) > 0) ofiles[[length(ofiles)]] else NA_character_
-}
-
-bmde_project_root <- function() {
-  root <- if (!is.na(bmde_script_path)) {
-    find_project_root(dirname(bmde_script_path))
-  } else NA_character_
-  if (is.na(root)) root <- find_project_root(getwd())
-  if (is.na(root)) {
-    stop("Could not locate the project root (a folder containing an .Rproj ",
-         "file); pass `out_dir` explicitly.")
-  }
-  root
-}
 
 unescape_html <- function(x) {
   entities <- list(
@@ -122,7 +89,7 @@ resolve_versions <- function(versions, lookup) {
 }
 
 parse_bmde_terms <- function(versions = NULL,
-                             out_dir = file.path(bmde_project_root(), "data", "external"),
+                             out_dir = rprojroot::find_root_file("data", "external", criterion = rprojroot::is_rstudio_project),
                              overwrite = FALSE,
                              url = bmde_url) {
   props <- fetch_bmde_props(url)
@@ -154,7 +121,7 @@ parse_bmde_terms <- function(versions = NULL,
 if (sys.nframe() == 0L) {
   # renv only auto-activates when R starts in the project root, so load the
   # project library explicitly in case Rscript was run from elsewhere.
-  root <- bmde_project_root()
+  root <- rprojroot::find_root_file(criterion = rprojroot::is_rstudio_project)
   if (Sys.getenv("RENV_PROJECT") != root &&
       file.exists(file.path(root, "renv", "activate.R")) &&
       requireNamespace("renv", quietly = TRUE)) {

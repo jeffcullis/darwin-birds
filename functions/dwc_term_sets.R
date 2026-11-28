@@ -1,13 +1,11 @@
 # dwc_term_sets.R
 #
 # Find out which Darwin Core distribution term lists ("sets") each term in the
-# Quick Reference CSV belongs to.
+# Quick Reference terms belongs to.
 #
-# The tdwg/dwc repo publishes one-term-per-line, headerless lists in dist/,
-# e.g. dist/dwc_vertical.csv, dist/chrono_vertical.csv,
-# dist/simple_dwc_vertical.csv. These functions download them to
-# data/external/tdwg/ (skipping any that are already there), read them in, and add
-# a logical column per set to the Quick Reference terms.
+# The set files (*_vertical.csv, one term per line, no header) must already be
+# downloaded; run scripts/data_processing/download_dwc_term_sets.R first. Each
+# set is named by its file stem, e.g. "simple_dwc" for simple_dwc_vertical.csv.
 #
 # Matching:
 #   - Namespace sets (ac, chrono, chronoiri, dc, dcterms, dwc, dwciri, eco,
@@ -17,41 +15,21 @@
 #   - simple_dwc mixes namespaces and has no IRI terms, so it is matched on
 #     term_name among dc:, dcterms: and dwc: terms. A name that exists in
 #     more than one of those (e.g. "language" as both dc:language and
-#     dcterms:language) is flagged TRUE for each.
+#     dcterms:language) is counted as in simple_dwc for each.
 #
 # Usage:
-#   source(here::here("functions", "dwc_term_sets.R"))
-#   terms <- add_dwc_term_sets()
+#   source(rprojroot::find_root_file("functions", "dwc_term_sets.R",
+#     criterion = rprojroot::is_rstudio_project))
+#   terms <- add_dwc_term_sets(tdwg_terms)
 
-dwc_dist_api <- "https://api.github.com/repos/tdwg/dwc/contents/dist"
-dwc_dist_raw <- "https://raw.githubusercontent.com/tdwg/dwc/master/dist"
-
-# Names of the *_vertical.csv files directly in dist/ (not in subdirectories).
-list_dwc_vertical_files <- function(api_url = dwc_dist_api) {
-  listing <- jsonlite::fromJSON(api_url)
-  files <- listing$name[listing$type == "file"]
-  sort(grep("_vertical\\.csv$", files, value = TRUE))
-}
-
-# Download any *_vertical.csv files not already in `dest_dir`. Returns the
-# local paths of all of them.
-download_dwc_vertical_files <- function(
-    dest_dir = here::here("data", "external", "tdwg"),
-    files = list_dwc_vertical_files()) {
-  dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
-  paths <- file.path(dest_dir, files)
-  for (i in seq_along(files)) {
-    if (!file.exists(paths[i])) {
-      curl::curl_download(file.path(dwc_dist_raw, files[i]), paths[i])
-      message("Downloaded ", files[i])
-    }
+# Read the *_vertical.csv files in `sets_dir` into a named list of character
+# vectors, one per set.
+read_dwc_term_sets <- function(sets_dir) {
+  paths <- list.files(sets_dir, pattern = "_vertical\\.csv$", full.names = TRUE)
+  if (length(paths) == 0) {
+    stop("No *_vertical.csv files in ", sets_dir, "; run ",
+         "scripts/data_processing/download_dwc_term_sets.R first.")
   }
-  paths
-}
-
-# Read the vertical files into a named list of character vectors, one per
-# set, named by the file stem (e.g. "simple_dwc").
-read_dwc_vertical_files <- function(paths) {
   sets <- lapply(paths, function(p) {
     x <- trimws(readLines(p, warn = FALSE, encoding = "UTF-8"))
     x[x != ""]
@@ -60,36 +38,33 @@ read_dwc_vertical_files <- function(paths) {
   sets
 }
 
-# Load the Quick Reference terms and add one logical column per set
-# (set_ac, set_chrono, ..., set_simple_dwc), plus `sets`, a comma-separated
-# summary of the sets each term is in.
+# Add a `sets` column to the Quick Reference terms data frame (needs
+# `term_name` and `qualified_name` columns): a comma-separated list of the
+# sets each term is in ("" if none).
 add_dwc_term_sets <- function(
-    quick_ref_file = here::here("data", "external", "tdwg",
-                                "dwc_quick_reference_terms.csv"),
-    dest_dir = here::here("data", "external", "tdwg")) {
-  terms <- readr::read_csv(quick_ref_file, show_col_types = FALSE)
-  sets <- read_dwc_vertical_files(download_dwc_vertical_files(dest_dir))
-
+    terms,
+    sets_dir = rprojroot::find_root_file(
+      "data", "external", "tdwg", criterion = rprojroot::is_rstudio_project)) {
+  sets <- read_dwc_term_sets(sets_dir)
   namespace <- sub(":.*$", "", terms$qualified_name)
 
-  for (set in names(sets)) {
-    in_set <- if (set == "simple_dwc") {
+  # Logical matrix: one row per term, one column per set.
+  in_set <- vapply(names(sets), function(set) {
+    if (set == "simple_dwc") {
       namespace %in% c("dc", "dcterms", "dwc") & terms$term_name %in% sets[[set]]
     } else {
       terms$qualified_name %in% paste0(set, ":", sets[[set]])
     }
-    terms[[paste0("set_", set)]] <- in_set
-  }
+  }, logical(nrow(terms)))
+  in_set <- matrix(in_set, nrow = nrow(terms), dimnames = list(NULL, names(sets)))
 
-  set_cols <- paste0("set_", names(sets))
-  terms$sets <- apply(as.matrix(terms[set_cols]), 1, function(row) {
+  terms$sets <- apply(in_set, 1, function(row) {
     paste(names(sets)[row], collapse = ", ")
   })
 
   # Report set entries that matched no Quick Reference term.
   for (set in names(sets)) {
-    matched <- terms$term_name[terms[[paste0("set_", set)]]]
-    missing <- setdiff(sets[[set]], matched)
+    missing <- setdiff(sets[[set]], terms$term_name[in_set[, set]])
     if (length(missing) > 0) {
       message(set, ": ", length(missing), " term(s) not in Quick Reference: ",
               paste(missing, collapse = ", "))
